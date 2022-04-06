@@ -10,6 +10,8 @@ services:
         sysctls:
                 - net.ipv4.conf.all.accept_redirects=1
         privileged: true
+        volumes:
+                - ./volumes:/volumes
         networks:
             net-10.9.0.0:
                 ipv4_address: 10.9.0.5
@@ -56,6 +58,20 @@ services:
                       ip route add 192.168.60.0/24 via 10.9.0.11 &&
                       tail -f /dev/null
                  "
+    Sqlite-3:
+        image: nouchka/sqlite3:latest
+        container_name: sqlite3-10.9.0.7
+        tty: true
+        stdin_open: true
+        privileged: true
+        volumes:
+                - ./volumes:/volumes
+        networks:
+            net-10.9.0.0:
+                ipv4_address: 10.9.0.7
+        ports:
+            - '9000:9000'    
+        restart: unless-stopped
 
     HostB1:
         image: handsonsecurity/seed-ubuntu:large
